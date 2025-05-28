@@ -139,6 +139,7 @@ body {
     .heading .small {
         font-size: 20px;
     }
+
 }
 
 .link {
@@ -151,7 +152,7 @@ body {
 .header {
     width: 100%;
     height: calc(100vh - 60px);
-    background: url(../img/header-christiano.JPG);
+    background: url(../img/header-christiano.png);
     background-size: cover;
     display: flex;
     justify-content: center;
