@@ -14,6 +14,14 @@
     {
       "src": "/(.*)",
       "dest": "/public/index.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/public/editor.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/public/blog.html"
     }
   ]
 }
