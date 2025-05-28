@@ -1,80 +1,79 @@
-const blogTitleField = document.querySelector('.title')
-const articleField = document.querySelector('.article')
+const blogTitleField = document.querySelector('.title');
+const articleFeild = document.querySelector('.article');
 
 // banner
-const bannerImage = document.querySelector('#banner-upload')
-const banner = document.querySelector('.banner')
-let bannerPath
+const bannerImage = document.querySelector('#banner-upload');
+const banner = document.querySelector(".banner");
+let bannerPath;
 
-const publishBtn = document.querySelector('.publish-btn')
-const uploadInput = document.querySelector('#image-upload')
+const publishBtn = document.querySelector('.publish-btn');
+const uploadInput = document.querySelector('#image-upload');
 
 bannerImage.addEventListener('change', () => {
-    uploadImage(bannerImage, "banner")
+    uploadImage(bannerImage, "banner");
 })
 
 uploadInput.addEventListener('change', () => {
-    uploadImage(uploadInput, "image")
+    uploadImage(uploadInput, "image");
 })
 
 const uploadImage = (uploadFile, uploadType) => {
-    const [file] = uploadFile.files
+    const [file] = uploadFile.files;
     if(file && file.type.includes("image")){
-        const formdata = new FormData()
-        formdata.append('image', file)
+        const formdata = new FormData();
+        formdata.append('image', file);
 
-        fetch('/uploads', {
+        fetch('/upload', {
             method: 'post',
             body: formdata
         }).then(res => res.json())
         .then(data => {
             if(uploadType == "image"){
-                addImage(data, file.name)
-            } else {
-                bannerPath = `${location.origin}/${data}`
-                banner.style.backgroundImage = `url("${bannerPath}")`
+                addImage(data, file.name);
+            } else{
+                bannerPath = `${location.origin}/${data}`;
+                banner.style.backgroundImage = `url("${bannerPath}")`;
             }
-            
         })
-    } else {
-        alert("Inserir apenas Imagens.")
+    } else{
+        alert("Apenas inserir imagens!");
     }
 }
 
 const addImage = (imagepath, alt) => {
-    let curPos = articleField.selectionStart
-    let textToInsert = `\r![${alt}](${imagepath})\r`
-    articleField.value = articleField.value.slice(0, curPos) + textToInsert + articleField.value.slice(curPos)
+    let curPos = articleFeild.selectionStart;
+    let textToInsert = `\r![${alt}](${imagepath})\r`;
+    articleFeild.value = articleFeild.value.slice(0, curPos) + textToInsert + articleFeild.value.slice(curPos);
 }
 
-let months = ["Jan", "Fev", "Mar", "Abr",  "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"]
+let months = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
 
 publishBtn.addEventListener('click', () => {
-    if(articleField.value.length && blogTitleField.value.length){
-        //generating id
-        let letters = 'abcdefghijklmnopqrstuvwxyz'
-        let blogTitle = blogTitleField.value.split(" ").join("-")
-        let id = ''
+    if(articleFeild.value.length && blogTitleField.value.length){
+        // generating id
+        let letters = 'abcdefghijklmnopqrstuvwxyz';
+        let blogTitle = blogTitleField.value.split(" ").join("-");
+        let id = '';
         for(let i = 0; i < 4; i++){
-            id += letters[Math.floor(Math.random() * letters.length)]
+            id += letters[Math.floor(Math.random() * letters.length)];
         }
 
         // setting up docName
-        let docName = `${blogTitle}-${id}`
-        let date = new Date() //for published at info
+        let docName = `${blogTitle}-${id}`;
+        let date = new Date(); // for published at info
 
-        //acess firstore with db variable
+        //access firstore with db variable;
         db.collection("blogs").doc(docName).set({
             title: blogTitleField.value,
-            article: articleField.value,
+            article: articleFeild.value,
             bannerImage: bannerPath,
             publishedAt: `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`
         })
         .then(() => {
-            location.href = `/${docName}`
+            location.href = `/${docName}`;
         })
         .catch((err) => {
-            console.error(err)
+            console.error(err);
         })
     }
 })
